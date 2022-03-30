@@ -10,9 +10,9 @@ import {
 } from "@orca-so/sdk";
 import Decimal from "decimal.js";
 
-const ORCA_SOL = OrcaPoolConfig.ORCA_SOL;
-const ORCA_SOL_AQ = OrcaFarmConfig.ORCA_SOL_AQ;
-const ORCA_mSOL_DD = OrcaFarmConfig.ORCA_mSOL_DD;
+const ETH_SOL = OrcaPoolConfig.ETH_SOL;
+const ETH_SOL_AQ = OrcaFarmConfig.mSOL_SOL_AQ;
+const ETH_SOL_DD = OrcaFarmConfig.mSOL_SOL_DD;
 
 export class Stake {
   private _orca: Orca;
@@ -28,37 +28,36 @@ export class Stake {
       this._orca = getOrca(connection)
     }
 
-    this._pool = this._orca.getPool(ORCA_SOL)
-    this._farm = this._orca.getFarm(ORCA_SOL_AQ)
-    this._ddFarm = this._orca.getFarm(ORCA_mSOL_DD)
+    this._pool = this._orca.getPool(ETH_SOL)
+    this._farm = this._orca.getFarm(ETH_SOL_AQ)
+    this._ddFarm = this._orca.getFarm(ETH_SOL_DD)
   }
 
   async swap(amount: number): Promise<string>{
     const solToken = this._pool.getTokenB();
     const solAmount = new Decimal(amount);
     const quote = await this._pool.getQuote(solToken, solAmount);
-    const usdcAmount = quote.getMinOutputAmount();
+    const ETHAmount = quote.getMinOutputAmount();
 
-    console.log(`Swap ${solAmount.toString()} SOL for at least ${usdcAmount.toNumber()} ORCA`);
+    console.log(`Swap ${solAmount.toString()} SOL for at least ${ETHAmount.toNumber()} ETH`);
 
-    const swapPayload = await this._pool.swap(this._wallet, solToken, solAmount, usdcAmount);
+    const swapPayload = await this._pool.swap(this._wallet, solToken, solAmount, ETHAmount);
     const swapTxId = await swapPayload.execute();
     return swapTxId;
-    // return '';
   }
 
   async poolDeposit(amount: number): Promise<string>{
     const solToken = this._pool.getTokenB();
     const solAmount = new Decimal(amount);
     const quote = await this._pool.getQuote(solToken, solAmount);
-    const usdcAmount = quote.getMinOutputAmount();
+    const ETHAmount = quote.getMinOutputAmount();
     const { maxTokenAIn, maxTokenBIn, minPoolTokenAmountOut } = await this._pool.getDepositQuote(
-      usdcAmount,
+      ETHAmount,
       solAmount
     );
 
     console.log(
-      `Deposit at most ${maxTokenBIn.toNumber()} SOL and ${maxTokenAIn.toNumber()} ORCA, for at least ${minPoolTokenAmountOut.toNumber()} LP tokens`
+      `Deposit at most ${maxTokenBIn.toNumber()} SOL and ${maxTokenAIn.toNumber()} ETH, for at least ${minPoolTokenAmountOut.toNumber()} LP tokens`
     );
     const poolDepositPayload = await this._pool.deposit(
       this._wallet,
@@ -80,7 +79,7 @@ export class Stake {
     );
 
     console.log(
-      `Withdraw at most ${maxPoolTokenAmountIn.toNumber()} ORCA_SOL LP token for at least ${minTokenAOut.toNumber()} ORCA and ${minTokenBOut.toNumber()} SOL`
+      `Withdraw at most ${maxPoolTokenAmountIn.toNumber()} ETH_SOL LP token for at least ${minTokenAOut.toNumber()} ORCA and ${minTokenBOut.toNumber()} SOL`
     );
     const poolWithdrawPayload = await this._pool.withdraw(
       this._wallet,

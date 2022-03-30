@@ -15,39 +15,33 @@ import {Stake} from './stake'
 
   const stake = new Stake(owner, connection, 'devnet')
 
-  // const hash = await stake.swap(1)
-  // console.log(hash)
-
+  // SWAP SOL->mSOL
+  console.log("SWAP SOL->ETH")
+  const hash = await stake.swap(1)
+  console.log("Swap ETH->SOL tx: ", hash)
+  console.log("------------------------")
+  console.log()
+  // // Deposit ETH_SOL to Pool
   // const deposit = await stake.poolDeposit(1)
   // console.log(deposit)
-
-  const balance = await stake.poolBalance()
-  console.log(balance)
-
-  // const tx = await stake.poolWithdraw()
-  // console.log(tx)
-
-  // const lastBalance = await stake.poolBalance()
-  // console.log(lastBalance)
-
+  // console.log("------------------------")
+  // console.log()
+  // // Get pool balance
+  // const balance = await stake.poolBalance()
+  // console.log("Pool Balance: ", balance)
+  // console.log("------------------------")
+  // console.log()
+  // // Farm deposit ETH_SOL LP token for farm token
   // const farmtx = await stake.farmDeposit()
-  // console.log(farmtx)
-
-  
+  // console.log("Farm deposit tx: ", farmtx)
   // const farmBalance = await stake.farmBalance()
-  // console.log("befor WithDraw: ", farmBalance)
+  // console.log("Farm balance: ", farmBalance)
+  // console.log("------------------------")
+  // console.log()
+  // // Double Dip
+  // const ddFarm = await stake.farmDoubleDipDeposit()
+  // console.log("Double dip tx: ", ddFarm)
+  // const ddfarmBalance = await stake.farmBalance()
+  // console.log("DD Farm balance: ", ddfarmBalance)
 
-  // const farmWithdraw = await stake.farmWithdraw()
-  // console.log("withDraw TX: ", farmWithdraw)
-
-  // const lastfarmBalance = await stake.farmBalance()
-  // console.log("after withdraw: ", lastfarmBalance)
-
-  // const pbalance = await stake.poolBalance()
-  // console.log("Pool balance: ", pbalance)
-
-
-
-
-  
 })()
