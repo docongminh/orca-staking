@@ -10,7 +10,7 @@ import {Stake} from './stake'
   });
   const secretKey = Uint8Array.from(JSON.parse(secretKeyString));
   const owner = Keypair.fromSecretKey(secretKey);
-  // console.log(owner.publicKey.toString())
+  console.log(owner.publicKey.toString())
   const connection = new Connection("https://api.devnet.solana.com", "singleGossip");
 
   const stake = new Stake(owner, connection, 'devnet')
@@ -21,27 +21,27 @@ import {Stake} from './stake'
   console.log("Swap ETH->SOL tx: ", hash)
   console.log("------------------------")
   console.log()
-  // // Deposit ETH_SOL to Pool
-  // const deposit = await stake.poolDeposit(1)
-  // console.log(deposit)
-  // console.log("------------------------")
-  // console.log()
-  // // Get pool balance
-  // const balance = await stake.poolBalance()
-  // console.log("Pool Balance: ", balance)
-  // console.log("------------------------")
-  // console.log()
-  // // Farm deposit ETH_SOL LP token for farm token
-  // const farmtx = await stake.farmDeposit()
-  // console.log("Farm deposit tx: ", farmtx)
-  // const farmBalance = await stake.farmBalance()
-  // console.log("Farm balance: ", farmBalance)
-  // console.log("------------------------")
-  // console.log()
-  // // Double Dip
-  // const ddFarm = await stake.farmDoubleDipDeposit()
-  // console.log("Double dip tx: ", ddFarm)
-  // const ddfarmBalance = await stake.farmBalance()
-  // console.log("DD Farm balance: ", ddfarmBalance)
+  // Deposit ETH_SOL to Pool
+  const deposit = await stake.poolDeposit(1)
+  console.log(deposit)
+  console.log("------------------------")
+  console.log()
+  // Get pool balance
+  const balance = await stake.poolBalance()
+  console.log("Pool Balance: ", balance)
+  console.log("------------------------")
+  console.log()
+  // Farm deposit ETH_SOL LP token for farm token
+  const farmtx = await stake.farmDeposit()
+  console.log("Farm deposit tx: ", farmtx)
+  const farmBalance = await stake.farmBalance()
+  console.log("Farm balance: ", farmBalance)
+  console.log("------------------------")
+  console.log()
+  // Double Dip
+  const ddFarm = await stake.farmDoubleDipDeposit()
+  console.log("Double dip tx: ", ddFarm)
+  const ddfarmBalance = await stake.farmBalance()
+  console.log("DD Farm balance: ", ddfarmBalance)
 
 })()

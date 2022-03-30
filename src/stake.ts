@@ -9,10 +9,12 @@ import {
   Network 
 } from "@orca-so/sdk";
 import Decimal from "decimal.js";
+import { ethSolDoubleDip } from '@orca-so/sdk/dist/constants/devnet/farms'
+import { OrcaFarmImpl } from '@orca-so/sdk/dist/model/orca/farm/orca-farm'
 
 const ETH_SOL = OrcaPoolConfig.ETH_SOL;
-const ETH_SOL_AQ = OrcaFarmConfig.mSOL_SOL_AQ;
-const ETH_SOL_DD = OrcaFarmConfig.mSOL_SOL_DD;
+const ETH_SOL_AQ = OrcaFarmConfig.ETH_SOL_AQ;
+// const ETH_SOL_DD = OrcaFarmConfig.ETH_SOL_DD;
 
 export class Stake {
   private _orca: Orca;
@@ -30,7 +32,8 @@ export class Stake {
 
     this._pool = this._orca.getPool(ETH_SOL)
     this._farm = this._orca.getFarm(ETH_SOL_AQ)
-    this._ddFarm = this._orca.getFarm(ETH_SOL_DD)
+    // this._ddFarm = this._orca.getFarm(ETH_SOL_DD)
+     this._ddFarm = new OrcaFarmImpl(connection, ethSolDoubleDip);
   }
 
   async swap(amount: number): Promise<string>{
@@ -108,6 +111,8 @@ export class Stake {
 
   async farmDoubleDipDeposit(): Promise<string> {
     const farmBalance = await this._farm.getFarmBalance(this._wallet.publicKey);
+    // ETH_SOL_DD is not defined at OrcaFarmConfig for Mainnet.
+    // direct import from file
     const farmDepositPayload = await this._ddFarm.deposit(this._wallet, farmBalance);
     //
     const farmDepositTxId = await farmDepositPayload.execute();
