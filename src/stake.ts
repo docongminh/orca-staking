@@ -11,13 +11,15 @@ import {
 import Decimal from "decimal.js";
 
 const ORCA_SOL = OrcaPoolConfig.ORCA_SOL;
-const ORCA_AQ = OrcaFarmConfig.ORCA_SOL_AQ;
+const ORCA_SOL_AQ = OrcaFarmConfig.ORCA_SOL_AQ;
+const ORCA_mSOL_DD = OrcaFarmConfig.ORCA_mSOL_DD;
 
 export class Stake {
   private _orca: Orca;
   private _wallet: Keypair;
   private _pool: OrcaPool;
-  private _farm: OrcaFarm
+  private _farm: OrcaFarm;
+  private _ddFarm: OrcaFarm;
   constructor(wallet: Keypair, connection: Connection, type: string){
     this._wallet = wallet;
     if(type==='devnet'){
@@ -27,7 +29,8 @@ export class Stake {
     }
 
     this._pool = this._orca.getPool(ORCA_SOL)
-    this._farm = this._orca.getFarm(ORCA_AQ)
+    this._farm = this._orca.getFarm(ORCA_SOL_AQ)
+    this._ddFarm = this._orca.getFarm(ORCA_mSOL_DD)
   }
 
   async swap(amount: number): Promise<string>{
@@ -105,8 +108,8 @@ export class Stake {
   }
 
   async farmDoubleDipDeposit(): Promise<string> {
-    const lpBalance = await this._pool.getLPBalance(this._wallet.publicKey);
-    const farmDepositPayload = await this._farm.deposit(this._wallet, lpBalance);
+    const farmBalance = await this._farm.getFarmBalance(this._wallet.publicKey);
+    const farmDepositPayload = await this._ddFarm.deposit(this._wallet, farmBalance);
     //
     const farmDepositTxId = await farmDepositPayload.execute();
     return farmDepositTxId;
@@ -137,7 +140,4 @@ export class Stake {
     
     return farmWithdrawTxId;
   }
-
-
-
 }
